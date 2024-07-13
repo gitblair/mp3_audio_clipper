@@ -11,4 +11,8 @@ Plays on Wavesurfer Offers file size info
 ffers server stats and link to php.ini
 <br>
 <br>
-PHP Bootstrap 5.3 Wavesurfer
+PHP
+<br>
+Bootstrap 5.3
+<br>
+Wavesurfer
