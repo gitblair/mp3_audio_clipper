@@ -1,3 +1,6 @@
+
+<img width="1321" alt="Screenshot 2024-07-13 at 7 45 36 PM" src="https://github.com/user-attachments/assets/7ad15646-02ec-4b38-8ec8-89258cf33e23">
+
 Builds upon audio editor
 <br>
 Work in progress
