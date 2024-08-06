@@ -1,80 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Audio Editor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP3 Audio Clipper</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    #waveform {
-      width: 100%;
-      height: 128px;
-      background-color: #f2f2f2;
-    }
-    .controls {
-      margin-top: 20px;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="container-xxl">
-    <div class="row mt-5">
-      <h1>Audio Editor</h1>
-      <form id="uploadForm" enctype="multipart/form-data" method="post" action="upload.php">
-        <div class="mb-3">
-          <input class="form-control" type="file" id="formFile" name="audiofile" required>
-        </div>
+    <!-- Bootstrap Style -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- App Style -->
+    <link rel="stylesheet" href="styles.css">
+
+  </head>
+  <body>
+    <div class="container-lg mb-5">
+      <div class="row">
         <div class="col-12">
-          <button class="btn btn-primary" type="submit">Upload</button>
-        </div>
-      </form>
-      <div id="error-message" class="text-danger mt-3"></div>
+
+          <?php include 'config.php'; ?>
+          <h1 class="my-4">MP3 Audio Clipper</h1>
+
+  <form id="uploadForm" class="mb-4" enctype="multipart/form-data" method="post" action="upload.php">
+    <div class="mb-3">
+      <!-- <label for="fileInput" class="form-label">Upload Audio</label> -->
+      <input type="file" id="fileInput" class="form-control" name="audiofile" required <?php echo !$allow_uploads ? 'disabled' : ''; ?>>
     </div>
 
-    <div class="row mt-5">
-      <div class="col-md-4">
-        <?php
-        if (isset($_GET["audiopath"])) {
-          $audiopath = $_GET["audiopath"];
-        } else {
-          $audiopath = "jazz.mp3"; // Ensure this file is accessible
-        }
+    <button type="submit" class="btn btn-primary" <?php echo !$allow_uploads ? 'disabled' : ''; ?>>Upload</button>
 
-        echo "<p>File: </p>";
-        echo "<ul><li>" . htmlspecialchars($audiopath) . "</li></ul>";
+    <?php if (!$allow_uploads): ?>
+        <div class="mt-2 text-danger">Uploads are turned off for this demonstration.</div>
+        <div class="mt-2 text-success">A default MP3 is pre-loaded for you to try the clipping functions. Enjoy!</div>
+    <?php endif; ?>
 
-        if (file_exists($audiopath)) {
-          $filesize = filesize($audiopath);
-          echo "<p>File size: </p>";
-          echo "<ul>";
-          echo "<li>Bytes: $filesize</li>";
-          echo "<li>KB: " . number_format($filesize / 1024, 2) . "</li>";
-          echo "<li>MB: " . number_format($filesize / (1024 * 1024), 2) . "</li>";
-          echo "<li>GB: " . number_format($filesize / (1024 * 1024 * 1024), 2) . "</li>";
-          echo "</ul>";
-        }
-
-        echo "<p>Server Stats: </p>";
-        echo "<ul>";
-        echo "<li>upload_max_filesize: " . ini_get('upload_max_filesize') . "</li>";
-        echo "<li>post_max_size: " . ini_get('post_max_size') . "</li>";
-        echo "<li>max_execution_time: " . ini_get('max_execution_time') . "</li>";
-        echo "<li><a href='phpinfo.php'>full php info</a></li>";
-        echo "</ul>";
-        ?>
+    <?php
+    if (isset($_GET["audiopath"])) {
+    $audiopath = $_GET["audiopath"];
+    } else {
+    $audiopath = "jazz.mp3"; // Ensure this file is accessible
+    }
+    ?>
 
         <input type="hidden" id="audiopath" name="audiopath" value="<?php echo $audiopath; ?>">
-      </div>
+    </form>
+          <div id="error-message" class="text-danger mt-3"></div>
+        </div>
 
-      <div class="col-md-8">
+
+      <div class="col-12">
         <div id="waveform"></div>
+
+
+
+
+
+
+        <div class="center-buttons my-2">
+              <button id="setInPoint" class="btn btn-primary mx-2">Set IN</button>
+              <button id="setOutPoint" class="btn btn-primary mx-2">Set OUT</button>
+        </div>
+
+
+
+
+
+
         <br>
-        <button class="btn btn-outline-secondary" onclick="submitClip()">Clip it</button>
+        <button id="downloadClip" class="btn btn-success mt-3 mb-5 mx-auto d-block" onclick="submitClip()">Clip & Download</button>
+              <!-- <button id="downloadClip" class="btn btn-success mt-3 mb-5 mx-auto d-block">Clip & Download</button> -->
       </div>
 
       <div id="debug"></div>
+
+
+      <div class="row">
+        <div class="col-12">
+          <nav class="text-center">
+            <ul class="nav justify-content-center">
+              <li class="nav-item">
+                <a class="nav-link" href="instructions.html">instructions</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="stats.php?audiopath=<?php echo $audiopath; ?>">stats</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="phpinfo.php">phpinfo</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="attrib.html">attribution</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/3.3.3/wavesurfer.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/3.3.3/plugin/wavesurfer.regions.min.js"></script>
