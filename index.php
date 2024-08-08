@@ -43,7 +43,8 @@
     if (isset($_GET["audiopath"])) {
     $audiopath = $_GET["audiopath"];
     } else {
-    $audiopath = "jazz.mp3"; // Ensure this file is accessible
+    //$audiopath = "jazz.mp3";
+    $audiopath = $default_audio_url;
     }
     ?>
 
@@ -95,7 +96,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/3.3.3/plugin/wavesurfer.regions.min.js"></script>
       <!-- Custom JS -->
       <script>var audiopath = <?php echo json_encode($audiopath); ?>;</script>
-      <script src="editing.js"></script> 
+      <script src="editing.js"></script>
     </div>
   </div>
 </body>
