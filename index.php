@@ -25,6 +25,23 @@
 
           <?php include 'config.php'; ?>
           <h1 class="my-4">MP3 Audio Clipper</h1>
+		  
+		  <?php
+		            // Set the default timezone (adjust as needed)
+		            date_default_timezone_set('America/New_York'); // Example: Eastern Time (US & Canada)
+
+		            // Get the path of the current script
+		            $currentFile = __FILE__;
+
+		            // Get the last modification time of the current script
+		            $fileModTime = filemtime($currentFile);
+
+		            // Format the timestamp to a date and time string in 12-hour format with AM/PM
+		            $dateTime = date('Y-m-d h:i:s A', $fileModTime);
+
+		            // Display the date and time when the file was last modified
+		            echo '<p class="ms-3 mb-4 text-secondary">Last modified: ' . $dateTime . '</p>';
+		            ?>
 
   <form id="uploadForm" class="mb-4" enctype="multipart/form-data" method="post" action="upload.php">
     <div class="mb-3">
