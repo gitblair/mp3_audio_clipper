@@ -1,6 +1,6 @@
 <?php
     header('Content-Type: application/json');
-
+require "config.php";
     $response = [
         'success' => false,
         'error' => ''
@@ -21,7 +21,6 @@
         $debug[] = "Clip Name: $clipName, Output File: $outputFile";
 
 
-        $ffmpegPath = '/opt/homebrew/bin/ffmpeg';
 
         // Ensure paths are properly escaped
         $escapedInputFile = escapeshellarg($inputFile);
