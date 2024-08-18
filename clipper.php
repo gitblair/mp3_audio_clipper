@@ -45,25 +45,4 @@ require "config.php";
         }
     }
 
-
-
-
-        // Use the absolute path to ffmpeg
-        //$ffmpegPath = '/opt/homebrew/bin/ffmpeg';  // Change this to the output of `which ffmpeg`
-
-        // Adjust start and duration to account for potential inaccuracies
-        //$adjustedStartTime = $startTime + 0.5;  // Adding 0.5 seconds
-        //$adjustedDuration = $duration + 1.0;  // add 1 second
-
-        //$command = "$ffmpegPath -ss $startTime -i \"$inputFile\" -t $duration \"$outputFile\" 2>&1";
-
-
-
-
-
-
-
-
-
-
     ?>
